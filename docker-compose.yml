@@ -5,7 +5,7 @@ services:
     image: mongo:6.0
     container_name: mongodb
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       MONGO_INITDB_DATABASE: giftsdb
     volumes:
@@ -17,7 +17,7 @@ services:
     build: ./giftlink-backend
     container_name: giftapp
     ports:
-      - "3060:3060"
+      - "3061:3060"
     environment:
       MONGO_URL: mongodb://mongodb:27017
       JWT_SECRET: your-secret-key
@@ -30,9 +30,19 @@ services:
     build: ./giftlink-frontend
     container_name: giftlink-frontend
     ports:
-      - "3000:3000"
+      - "3003:3000"
     environment:
-      REACT_APP_API_URL: http://localhost:3060
+      REACT_APP_API_URL: http://localhost:3061
+    depends_on:
+      - giftapp
+    networks:
+      - giftlink-network
+
+  giftwebsite:
+    build: ./giftwebsite
+    container_name: giftwebsite
+    ports:
+      - "9000:9000"
     depends_on:
       - giftapp
     networks:
