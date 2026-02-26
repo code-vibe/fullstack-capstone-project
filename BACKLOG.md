@@ -26,7 +26,7 @@ Each story uses the existing `User Story` issue template with filled details and
    **Acceptance:** Auth views exist, tokens are stored client-side, and protected routes enforce auth.
 
 ### Icebox (later sprints)
-6. **Implement Gifts details page** — As a user, I need a detailed view of a gift so that I can decide to purchase or save it.  
+6. **Implement gift details page** — As a user, I need a detailed view of a gift so that I can decide to purchase or save it.  
    **Acceptance:** Details page shows description, price, and related items.
 7. **Implement a search component** — As a user, I need to search for gifts so that I can find items quickly.  
    **Acceptance:** Search input returns filtered results against the catalog.
@@ -40,4 +40,3 @@ Each story uses the existing `User Story` issue template with filled details and
 ### Technical debt
 - **Research authentication in React and Express** — Investigate best practices for secure auth flows to reduce future refactors.  
   **Labels:** `technical debt` (applies alongside status label if scheduled).
-
