@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {urlConfig} from '../../config';
+import './SearchPage.css';
 
 function SearchPage() {
 
@@ -77,7 +78,7 @@ function SearchPage() {
                             {/* Task 3: Dynamically generate category and condition dropdown options.*/}
                             {/* Category Dropdown */}
                             <label htmlFor="categorySelect">Category</label>
-                            <select id="categorySelect" className="form-control my-1">
+                            <select id="categorySelect" className="form-control dropdown-filter">
                                 <option value="">All</option>
                                 {categories.map(category => (
                                     <option key={category} value={category}>{category}</option>
@@ -86,7 +87,7 @@ function SearchPage() {
 
                             {/* Condition Dropdown */}
                             <label htmlFor="conditionSelect">Condition</label>
-                            <select id="conditionSelect" className="form-control my-1">
+                            <select id="conditionSelect" className="form-control dropdown-filter">
                                 <option value="">All</option>
                                 {conditions.map(condition => (
                                     <option key={condition} value={condition}>{condition}</option>
@@ -97,7 +98,7 @@ function SearchPage() {
                             <label htmlFor="ageRange">Less than {ageRange} years</label>
                             <input
                                 type="range"
-                                className="form-control-range"
+                                className="form-control-range age-range-slider"
                                 id="ageRange"
                                 min="1"
                                 max="10"
@@ -109,20 +110,20 @@ function SearchPage() {
                     {/* Task 7: Add text input field for search criteria*/}
                     <input
                         type="text"
-                        className="form-control mb-2"
+                        className="search-input"
                         placeholder="Search gifts..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     {/* Task 8: Implement search button with onClick event to trigger search:*/}
-                    <button onClick={handleSearch} className="btn btn-primary mb-3">
+                    <button onClick={handleSearch} className="search-button">
                         Search
                     </button>
                     {/*Task 5: Display search results and handle empty results with a message. */}
                     <div className="search-results mt-4">
                         {searchResults.length > 0 ? (
                             searchResults.map(product => (
-                                <div key={product.id} className="card mb-3">
+                                <div key={product.id} className="card search-results-card">
                                     {/* Check if product has an image and display it */}
                                     {product.image && (
                                         <img src={product.image} alt={product.name} className="card-img-top" />
@@ -132,14 +133,14 @@ function SearchPage() {
                                         <p className="card-text">{product.description.slice(0, 100)}...</p>
                                     </div>
                                     <div className="card-footer">
-                                        <button onClick={() => goToDetailsPage(product.id)} className="btn btn-primary">
+                                        <button onClick={() => goToDetailsPage(product.id)} className="btn">
                                             View More
                                         </button>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <div className="alert alert-info" role="alert">
+                            <div className="no-products-alert" role="alert">
                                 No products found. Please revise your filters.
                             </div>
                         )}
