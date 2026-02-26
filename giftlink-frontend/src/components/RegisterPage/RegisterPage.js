@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { urlConfig } from '../../config';
+import { useAppContext } from '../../context/AuthContext';
 import './RegisterPage.css';
 
 function RegisterPage() {
@@ -6,9 +9,43 @@ function RegisterPage() {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showerr, setShowerr] = useState('');
+
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAppContext();
 
     const handleRegister = async () => {
-        console.log("Register invoked");
+        try {
+            const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password
+                })
+            });
+
+            const json = await response.json();
+
+            if (json.authtoken) {
+                sessionStorage.setItem('auth-token', json.authtoken);
+                sessionStorage.setItem('name', firstName);
+                sessionStorage.setItem('email', json.email);
+                setIsLoggedIn(true);
+                navigate('/app');
+            }
+
+            if (json.error) {
+                setShowerr(json.error);
+            }
+        } catch (e) {
+            console.log("Error fetching details: " + e.message);
+            setShowerr("Registration failed. Please try again.");
+        }
     };
 
     return (
@@ -17,6 +54,7 @@ function RegisterPage() {
                 <div className="col-md-6 col-lg-4">
                     <div className="register-card p-4 border rounded">
                         <h2 className="text-center mb-4 font-weight-bold">Register</h2>
+                        <div className="text-danger">{showerr}</div>
 
                         <div className="mb-4">
                             <label htmlFor="firstName" className="form-label">First Name</label>
