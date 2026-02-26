@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: giftlink-frontend
+  labels:
+    app: giftlink-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: giftlink-frontend
+  template:
+    metadata:
+      labels:
+        app: giftlink-frontend
+    spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: frontend-container
+          image: giftlink-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: "http://gift-app-service:80"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30080
+      protocol: TCP
+  selector:
+    app: giftlink-frontend
